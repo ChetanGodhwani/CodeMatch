@@ -47,7 +47,14 @@ requestRouter.post(
 
       const data = await connectionRequest.save();
 
-      const emailRes = await sendEmail.run();
+      const emailRes = await sendEmail.run(
+        "New Connection Request on CodeMatch",
+        req.user.firstName +
+          " is interested in connecting with " +
+          toUser.firstName +
+          ". A new connection request has been sent on CodeMatch.",
+      );
+
       console.log(emailRes);
 
       res.json({
