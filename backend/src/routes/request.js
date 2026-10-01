@@ -3,11 +3,13 @@ const requestRouter = express.Router();
 const User = require("../models/user");
 const { userAuth } = require("../middlewares/auth");
 const ConnectionRequest = require("../models/connectionRequest");
+const sendEmail = require("../utils/sendEmail");
 
 requestRouter.post(
   "/request/send/:status/:toUserId",
   userAuth,
   async (req, res) => {
+    console.log("🔥 SEND REQUEST ROUTE HIT");
     try {
       const fromUserId = req.user._id;
       const toUserId = req.params.toUserId;
@@ -44,6 +46,9 @@ requestRouter.post(
       });
 
       const data = await connectionRequest.save();
+
+      const emailRes = await sendEmail.run();
+      console.log(emailRes);
 
       res.json({
         message:
@@ -89,6 +94,6 @@ requestRouter.post(
       res.status(400).send("ERROR : " + err.message);
     }
   },
-); 
+);
 
 module.exports = requestRouter;
