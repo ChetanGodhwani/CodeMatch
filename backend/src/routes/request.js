@@ -9,7 +9,6 @@ requestRouter.post(
   "/request/send/:status/:toUserId",
   userAuth,
   async (req, res) => {
-    console.log("🔥 SEND REQUEST ROUTE HIT");
     try {
       const fromUserId = req.user._id;
       const toUserId = req.params.toUserId;
@@ -47,16 +46,15 @@ requestRouter.post(
 
       const data = await connectionRequest.save();
 
-      const emailRes = await sendEmail.run(
-        "New Connection Request on CodeMatch",
-        req.user.firstName +
-          " is interested in connecting with " +
-          toUser.firstName +
-          ". A new connection request has been sent on CodeMatch.",
-      );
-
-      console.log(emailRes);
-
+      if (status === "interested") {
+        const emailRes = await sendEmail.run(
+          "New Connection Request on CodeMatch",
+          req.user.firstName +
+            " is interested in connecting with " +
+            toUser.firstName +
+            ". A new connection request has been sent on CodeMatch.",
+        );
+      }
       res.json({
         message:
           req.user.firstName + " is " + status + " in " + toUser.firstName,

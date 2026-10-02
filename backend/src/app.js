@@ -3,7 +3,9 @@ const connectDB = require("./config/database");
 const app = express();
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+
 require("dotenv").config();
+require("./utils/cronjob");
 
 app.use(
   cors({
@@ -18,7 +20,6 @@ const authRouter = require("./routes/auth");
 const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/request");
 const userRouter = require("./routes/user");
-
 
 app.use("/", authRouter);
 app.use("/", profileRouter);
